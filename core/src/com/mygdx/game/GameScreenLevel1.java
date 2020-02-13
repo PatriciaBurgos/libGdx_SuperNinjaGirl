@@ -42,7 +42,7 @@ public class GameScreenLevel1 implements Screen{
     ZombieFemale zombie_fem;
     Coin coin;
     public List<Coin> coins;
-    Munieco munieco;
+    Munieco_Pasa_Level munieco;
     
     
     int score;
@@ -63,7 +63,7 @@ public class GameScreenLevel1 implements Screen{
 
         ninja = new Ninja();
         ninja.layer = (TiledMapTileLayer) map.getLayers().get("walls");
-        ninja.setPosition(180, 10);
+        ninja.setPosition(10, 10);
         stage.addActor(ninja);
         
         zombie = new ZombieMale();
@@ -79,7 +79,7 @@ public class GameScreenLevel1 implements Screen{
 	this.coins = new ArrayList<Coin>();
         this.loadCoin(0, 0);
         
-        munieco = new Munieco();
+        munieco = new Munieco_Pasa_Level();
         this.loadMunieco(0,0);
         
         score = 100;
@@ -123,9 +123,9 @@ public class GameScreenLevel1 implements Screen{
         
         
         System.out.println("Ninja X = " + ninja.getX());
-//        System.out.println("Munieco x = "+ munieco.getX());
+//        System.out.println("Munieco_Pasa_Level x = "+ munieco.getX());
         System.out.println("Ninja y = " + ninja.getY());
-//        System.out.println("Munieco y = "+ munieco.getY());
+//        System.out.println("Munieco_Pasa_Level y = "+ munieco.getY());
         
         
         renderer.setView(camera);
@@ -196,7 +196,7 @@ public class GameScreenLevel1 implements Screen{
                 if (monedas.getCell(x, y) != null) {
                     if (monedas.getProperties().get("visible", Boolean.class) == true) {
                         monedas.setCell(x, y, null);
-                        munieco = new Munieco();                        
+                        munieco = new Munieco_Pasa_Level();                        
                         munieco.setPosition(x, y);
                         stage.addActor(munieco);                        
                     }
@@ -259,7 +259,7 @@ public class GameScreenLevel1 implements Screen{
     }
     
     public void muerte(){
-        game.setScreen(new FinalScreen(game/*, this.score*/));
+        game.setScreen(new FinalScreen(game, this.score));
         dispose();
     }
     

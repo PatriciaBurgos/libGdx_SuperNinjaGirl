@@ -19,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  * @author patri
  */
 public class ZombieMale extends Image{
-TextureRegion stand;
+    TextureRegion stand;
     Animation walk, jump;
 
     
@@ -59,30 +59,44 @@ TextureRegion stand;
                 this.isFacingRight = false;
             }
         }
-        //Si x es mayor o igual a esto, haz algo
         
-        
-//        boolean leftTouched = Gdx.input.isTouched() && Gdx.input.getX() < Gdx.graphics.getWidth() / 3;
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || leftTouched) {
-//IZQUIERDA
-//            if(this.getX()>=5 && !this.isFacingRight){
-//                xVelocity = -1 * MAX_VELOCITY;
-//                this.isFacingRight = false;
-//            }else if(15<=this.getX() && this.isFacingRight){
-//                xVelocity = MAX_VELOCITY;
-//                this.isFacingRight = true;
-//            }
-            
-//            isFacingRight = false;
-//        }
-//
-//        boolean rightTouched = Gdx.input.isTouched() && Gdx.input.getX() > Gdx.graphics.getWidth() * 2 / 3;
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || rightTouched) {
-//DERECHA
-//            xVelocity = MAX_VELOCITY;
-//            isFacingRight = true;
-//        }
+        yVelocity = yVelocity + GRAVITY;
 
+        float x = this.getX();
+        float y = this.getY();
+        float xChange = xVelocity * delta;
+        float yChange = yVelocity * delta;
+
+        if (canMoveTo(x + xChange, y, false) == false) {
+            xVelocity = xChange = 0;
+        }
+
+        if (canMoveTo(x, y + yChange, yVelocity > 0) == false) {
+            canJump = yVelocity < 0;
+            yVelocity = yChange = 0;
+        }
+
+        this.setPosition(x + xChange, y + yChange);
+
+        xVelocity = xVelocity * DAMPING;
+        if (Math.abs(xVelocity) < 0.5f) {
+            xVelocity = 0;
+        }
+    }
+    
+    public void movimiento_zombie2(float delta, float ninja_x) {
+        time = time + delta;
+
+        
+        if(ninja_x>getX()){
+            this.xVelocity = MAX_VELOCITY;
+            this.isFacingRight = true;
+        } else{
+            xVelocity = -1 * MAX_VELOCITY;
+            this.isFacingRight = false;
+        }
+        
+        
         yVelocity = yVelocity + GRAVITY;
 
         float x = this.getX();

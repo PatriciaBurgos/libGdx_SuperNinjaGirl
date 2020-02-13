@@ -26,9 +26,11 @@ public class FinalScreen implements Screen{
 
     OrthographicCamera camera;
 
+    int score;
 
-    public FinalScreen(final MyGdxGame game) {
+    public FinalScreen(final MyGdxGame game, int score) {
             this.game = game;
+            this.score = score;
 
             camera = new OrthographicCamera();
             camera.setToOrtho(false, 800, 480);
@@ -36,7 +38,6 @@ public class FinalScreen implements Screen{
             batch = new SpriteBatch();   
             texture = new Texture(Gdx.files.internal("BG.png"));
             region = new TextureRegion(texture,0,0,800,480);
-
     }
 
   
@@ -55,7 +56,7 @@ public class FinalScreen implements Screen{
 
             game.batch.begin();
             game.font.draw(game.batch, "PULSA LA PANTALLA PARA VOLVER A EMPEZAR", 100, 200);
-            //PONER EL SCORE
+            game.font.draw(game.batch, "SCORE: " + score, 100, 180);
             game.batch.end();
 
             if (Gdx.input.isTouched()) {
