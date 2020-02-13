@@ -1,0 +1,47 @@
+zombie_female.png
+size: 1563, 1152
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Idle (1)
+  rotate: false
+  xy: 0, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (1)
+  rotate: false
+  xy: 521, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (2)
+  rotate: false
+  xy: 1042, 0
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (4)
+  rotate: false
+  xy: 0, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (6)
+  rotate: false
+  xy: 521, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1
+Walk (8)
+  rotate: false
+  xy: 1042, 576
+  size: 521, 576
+  orig: 521, 576
+  offset: 0, 0
+  index: -1

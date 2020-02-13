@@ -29,25 +29,26 @@ import java.util.logging.Logger;
  *
  * @author patri
  */
-public class GameScreen implements Screen{
+public class GameScreenLevel1 implements Screen{
     MyGdxGame game;
     
     Stage stage;
     TiledMap map;
     OrthogonalTiledMapRenderer renderer;
     OrthographicCamera camera;
+    
     Ninja ninja;
     ZombieMale zombie;
+    ZombieFemale zombie_fem;
     Coin coin;
     public List<Coin> coins;
+    Munieco munieco;
     
-    public Random rand;
     
     int score;
-    int cont;
-    int lon=-1;
+    
 
-    GameScreen(MyGdxGame game) {
+    GameScreenLevel1(MyGdxGame game) {
         this.game=game;
     }
 
@@ -62,7 +63,7 @@ public class GameScreen implements Screen{
 
         ninja = new Ninja();
         ninja.layer = (TiledMapTileLayer) map.getLayers().get("walls");
-        ninja.setPosition(20, 10);
+        ninja.setPosition(180, 10);
         stage.addActor(ninja);
         
         zombie = new ZombieMale();
@@ -70,12 +71,16 @@ public class GameScreen implements Screen{
         zombie.setPosition(0, 10);
         stage.addActor(zombie);
         
-//        coin = new Coin();
-//        //coin.layer = (TiledMapTileLayer) map.getLayers().get("walls");
-//        coin.setPosition(30, 10);
-//        stage.addActor(coin);
+        zombie_fem = new ZombieFemale();
+        zombie_fem.layer = (TiledMapTileLayer) map.getLayers().get("walls");
+        zombie_fem.setPosition(154, 15);
+        stage.addActor(zombie_fem);
+        
 	this.coins = new ArrayList<Coin>();
         this.loadCoin(0, 0);
+        
+        munieco = new Munieco();
+        this.loadMunieco(0,0);
         
         score = 100;
         
@@ -85,8 +90,6 @@ public class GameScreen implements Screen{
     public void render(float delta) {
         Gdx.gl.glClearColor(0.5f, 0.5f, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        
         
         camera.position.x = ninja.getX();
         if(ninja.getX()<=20){
@@ -104,38 +107,33 @@ public class GameScreen implements Screen{
         
         //MUERTE
         if(ninja.getY()<=0){
-            game.setScreen(new FinalScreen(game/*, this.score*/));
-            dispose();
+            this.muerte();
         }
         
+        if(score <0){
+            this.muerte();
+        }
         
         camera.update();
-        //game.batch.setProjectionMatrix(camera.combined);
-        
-        
         
         this.overlapsCoin();
+        this.overlapsMunieco();
+        this.overlapsZombieMale();
+        this.overlapsZombieFemale();
         
         
+        System.out.println("Ninja X = " + ninja.getX());
+//        System.out.println("Munieco x = "+ munieco.getX());
+        System.out.println("Ninja y = " + ninja.getY());
+//        System.out.println("Munieco y = "+ munieco.getY());
         
         
-//        int len = coins.size();
-        
-//        if (rand.nextFloat() > 0.2f) {
-//            Coin coin = new Coin( rand.nextFloat(), 20 + Coin.COIN_HEIGHT + rand.nextFloat() * 3);
-//            coins.add(coin);
-//        }
-        
-//        for (int i = 0; i < len; i++) {
-//                Coin coin = coins.get(i);
-//                //TextureRegion keyFrame = Assets.coinAnim.getKeyFrame(coin.stateTime, Animation.ANIMATION_LOOPING);
-////                batch.draw(coin.coin, coin.position.x - 0.5f, coin.position.y - 0.5f, 1, 1);                
-//        }
-
         renderer.setView(camera);
         renderer.render();
 
         this.zombie.movimiento_zombie(delta, ninja.getX());
+        this.zombie_fem.movimiento_zombie(delta, ninja.getX());
+        
         stage.act(delta);
         stage.draw();
         
@@ -184,6 +182,32 @@ public class GameScreen implements Screen{
         }
     }
     
+    private void loadMunieco(float startX, float startY) {
+        TiledMapTileLayer monedas = (TiledMapTileLayer) map.getLayers().get("estrella1");
+        
+        float endX = startX + monedas.getWidth();
+        float endY = startY + monedas.getHeight();
+
+        int x = (int) startX;
+        while (x < endX) {
+
+            int y = (int) startY;
+            while (y < endY) {
+                if (monedas.getCell(x, y) != null) {
+                    if (monedas.getProperties().get("visible", Boolean.class) == true) {
+                        monedas.setCell(x, y, null);
+                        munieco = new Munieco();                        
+                        munieco.setPosition(x, y);
+                        stage.addActor(munieco);                        
+                    }
+                }
+                y = y + 1;
+            }
+            x = x + 1;
+        }
+    }
+    
+    
     public void spawMoneda (float x, float y){
         Coin coin2 = new Coin();
         coin2.setPosition(x, y);
@@ -203,6 +227,42 @@ public class GameScreen implements Screen{
             i++;
         }      
     }
+    
+    public void overlapsMunieco(){
+        if(munieco.getX()-1.5f < ninja.getX() &&munieco.getX()+1.5f > ninja.getX() &&munieco.getY()-1.5f < ninja.getY() && munieco.getY()+1.5f > ninja.getY()){
+            game.setScreen(new GameScreenLevel2(game, this.score, this.ninja));
+                      
+        }                  
+    }
+    
+    public void overlapsZombieMale(){
+        
+        if(zombie.getX()-1f < ninja.getX() &&zombie.getX()+1f > ninja.getX() &&zombie.getY()-1f < ninja.getY() && zombie.getY()+1f > ninja.getY()){
+            //dropSound.play();
+            score-=25;
+            if(zombie.getX()>ninja.getX()){
+                ninja.setX(ninja.getX()-5);
+            }else{
+                ninja.setX(ninja.getX()+5);
+            }            
+        }      
+    }
+    
+    public void overlapsZombieFemale(){
+        
+        if(zombie_fem.getX()-1f < ninja.getX() &&zombie_fem.getX()+1f > ninja.getX() &&zombie_fem.getY()-1f < ninja.getY() && zombie_fem.getY()+1f > ninja.getY()){
+            //dropSound.play();
+            score-=40;
+            ninja.setX(50);
+                       
+        }      
+    }
+    
+    public void muerte(){
+        game.setScreen(new FinalScreen(game/*, this.score*/));
+        dispose();
+    }
+    
     
     //HACER COLISISONES CON EL ZOMBIE Y EL NINJA CON UN SCORE
 }

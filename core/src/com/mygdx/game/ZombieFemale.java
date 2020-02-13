@@ -5,8 +5,6 @@
  */
 package com.mygdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -18,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  *
  * @author patri
  */
-public class ZombieMale extends Image{
+public class ZombieFemale extends Image{
 TextureRegion stand;
     Animation walk, jump;
 
@@ -33,55 +31,42 @@ TextureRegion stand;
     final float GRAVITY = -2.5f;
     final float MAX_VELOCITY = 1f;
     final float DAMPING = 0.87f;
+    boolean ulti = true;
 
-    public ZombieMale() {        
-        final float width = 33;
-        final float height = 40; //120
+
+    public ZombieFemale() {        
+        final float width = 27;
+        final float height = 30; //120
         this.setSize(1, height / width);
 
-        Texture ninjaTexture = new Texture("zombie.png");
+        Texture ninjaTexture = new Texture("zombie_female.png");
         TextureRegion[][] grid = TextureRegion.split(ninjaTexture, (int) width, (int) height);
         
         stand = grid[0][0];
-        walk = new Animation(0.15f, grid[0][1], grid[1][0], grid[1][1], grid[2][0],grid[2][1]);        
+        walk = new Animation(0.15f, grid[0][1], grid[0][2], grid[1][0], grid[1][1],grid[1][2]);        
         walk.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
     }
 
     public void movimiento_zombie(float delta, float ninja_x) {
-        time = time + delta;
-
-        if(ninja_x<43){
-            if(ninja_x>getX()){
+        time = time + delta; //154-164
+        
+        if(ninja_x>=150 && ninja_x<=170){
+            if(this.getX()<=154){
                 this.xVelocity = MAX_VELOCITY;
                 this.isFacingRight = true;
-            } else{
+                ulti=true;
+            }
+            if (this.getX()>=164) {
                 xVelocity = -1 * MAX_VELOCITY;
                 this.isFacingRight = false;
+                ulti=false;
+            }
+            if(ulti){
+                this.xVelocity = MAX_VELOCITY;               
+            }else{
+                xVelocity = -1 * MAX_VELOCITY;
             }
         }
-        //Si x es mayor o igual a esto, haz algo
-        
-        
-//        boolean leftTouched = Gdx.input.isTouched() && Gdx.input.getX() < Gdx.graphics.getWidth() / 3;
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || leftTouched) {
-//IZQUIERDA
-//            if(this.getX()>=5 && !this.isFacingRight){
-//                xVelocity = -1 * MAX_VELOCITY;
-//                this.isFacingRight = false;
-//            }else if(15<=this.getX() && this.isFacingRight){
-//                xVelocity = MAX_VELOCITY;
-//                this.isFacingRight = true;
-//            }
-            
-//            isFacingRight = false;
-//        }
-//
-//        boolean rightTouched = Gdx.input.isTouched() && Gdx.input.getX() > Gdx.graphics.getWidth() * 2 / 3;
-//        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || rightTouched) {
-//DERECHA
-//            xVelocity = MAX_VELOCITY;
-//            isFacingRight = true;
-//        }
 
         yVelocity = yVelocity + GRAVITY;
 
