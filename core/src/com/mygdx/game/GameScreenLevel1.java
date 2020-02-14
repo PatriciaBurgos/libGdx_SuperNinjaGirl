@@ -44,7 +44,7 @@ public class GameScreenLevel1 implements Screen{
     Coin coin;
     public List<Coin> coins;
     Munieco_Pasa_Level munieco;
-    
+    public List<Munieco_Mas_5> muniecos_peque;
     
     int score;
     
@@ -82,6 +82,9 @@ public class GameScreenLevel1 implements Screen{
         
         munieco = new Munieco_Pasa_Level();
         this.loadMunieco(0,0);
+        
+        muniecos_peque = new ArrayList();
+        this.loadMuniecoPeque(0,0);
         
         score = 100;
         
@@ -121,6 +124,7 @@ public class GameScreenLevel1 implements Screen{
         this.overlapsMunieco();
         this.overlapsZombieMale();
         this.overlapsZombieFemale();
+        this.overlapsMuniecoPeque();
         
         
         System.out.println("Ninja X = " + ninja.getX());
@@ -183,6 +187,29 @@ public class GameScreenLevel1 implements Screen{
         }
     }
     
+    private void loadMuniecoPeque(float startX, float startY) {
+        TiledMapTileLayer monedas = (TiledMapTileLayer) map.getLayers().get("munieco_peque");
+        
+        float endX = startX + monedas.getWidth();
+        float endY = startY + monedas.getHeight();
+
+        int x = (int) startX;
+        while (x < endX) {
+
+            int y = (int) startY;
+            while (y < endY) {
+                if (monedas.getCell(x, y) != null) {
+                    if (monedas.getProperties().get("visible", Boolean.class) == true) {
+                        monedas.setCell(x, y, null);
+                        this.spawMuniecoPeque(x,y);
+                    }
+                }
+                y = y + 1;
+            }
+            x = x + 1;
+        }
+    }
+    
     private void loadMunieco(float startX, float startY) {
         TiledMapTileLayer monedas = (TiledMapTileLayer) map.getLayers().get("estrella1");
         
@@ -216,14 +243,34 @@ public class GameScreenLevel1 implements Screen{
         coins.add(coin2);
     }
     
+    public void spawMuniecoPeque (float x, float y){
+        Munieco_Mas_5 mun = new Munieco_Mas_5();
+        mun.setPosition(x, y);
+        stage.addActor(mun);
+        muniecos_peque.add(mun);
+    }
+    
     public void overlapsCoin(){
         int i = 0;
         for (Coin coin : coins) {
             if(coin.getX()-1.5f < ninja.getX() &&coin.getX()+1.5f > ninja.getX() &&coin.getY()-1.5f < ninja.getY() && coin.getY()+1.5f > ninja.getY()){
                 //dropSound.play();
-                score+=10;
+                score+=15;
                 coin.remove();
                 coin.setY(100);
+            }
+            i++;
+        }      
+    }
+    
+    public void overlapsMuniecoPeque(){
+        int i = 0;
+        for (Munieco_Mas_5 muni : muniecos_peque) {
+            if(muni.getX()-1.5f < ninja.getX() &&muni.getX()+1.5f > ninja.getX() &&muni.getY()-1.5f < ninja.getY() && muni.getY()+1.5f > ninja.getY()){
+                //dropSound.play();
+                score+=5;
+                muni.remove();
+                muni.setY(100);
             }
             i++;
         }      

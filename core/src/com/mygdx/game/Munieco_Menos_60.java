@@ -32,7 +32,7 @@ public class Munieco_Menos_60 extends Image{
 
     public Munieco_Menos_60() {        
         final float width = 20;
-        final float height = 18; //120
+        final float height = 18; 
         this.setSize(1, height / width);
 
         Texture ninjaTexture = new Texture("munieco3.png");

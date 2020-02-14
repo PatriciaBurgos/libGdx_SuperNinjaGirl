@@ -37,7 +37,7 @@ public class GameScreenLevel2 implements Screen{
     Munieco_Pasa_Level munieco;
     Munieco_Menos_60 mun_resta;
     Munieco_Mas_60 mun_sum;
-    
+    public List<Munieco_Mas_5> muniecos_peque;
     
     GameScreenLevel2(MyGdxGame game, int score, Ninja ninja) {
         this.game = game;
@@ -69,6 +69,7 @@ public class GameScreenLevel2 implements Screen{
         this.loadMunieco3(0, 0);
         
         this.mun_sum = new Munieco_Mas_60();
+        mun_sum.layer = (TiledMapTileLayer) map.getLayers().get("tierras");
         this.loadMunieco2(0, 0);
         
         this.coins = new ArrayList<Coin>();
@@ -76,11 +77,14 @@ public class GameScreenLevel2 implements Screen{
         
         munieco = new Munieco_Pasa_Level();
         this.loadMunieco(0,0);
+        
+        muniecos_peque = new ArrayList();
+        this.loadMuniecoPeque(0,0);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.5f, 0.5f, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         camera.position.x = ninja.getX();
@@ -113,6 +117,7 @@ public class GameScreenLevel2 implements Screen{
         this.overlapsZombieMale();
         this.overlapsMuniecoResta();
         this.overlapsMuniecoSuma();
+        this.overlapsMuniecoPeque();
         
         System.out.println("Ninja X = " + ninja.getX());
 //        System.out.println("Munieco_Pasa_Level x = "+ munieco.getX());
@@ -189,7 +194,7 @@ public class GameScreenLevel2 implements Screen{
     public void overlapsMuniecoSuma(){
         if(this.mun_sum.getX()-1f < ninja.getX() &&mun_sum.getX()+1f > ninja.getX() &&mun_sum.getY()-1f < ninja.getY() && mun_sum.getY()+1f > ninja.getY()){
             //dropSound.play();
-            score+=60;
+            score+=80;
             mun_sum.remove();     
             mun_sum.setY(100);
         } 
@@ -239,9 +244,9 @@ public class GameScreenLevel2 implements Screen{
                 if (monedas.getCell(x, y) != null) {
                     if (monedas.getProperties().get("visible", Boolean.class) == true) {
                         monedas.setCell(x, y, null);
-                        this.mun_sum = new Munieco_Mas_60();                        
+                        //this.mun_sum = new Munieco_Mas_60();                        
                         this.mun_sum.setPosition(x, y);
-                        stage.addActor(mun_sum);                        
+                        stage.addActor(this.mun_sum);                        
                     }
                 }
                 y = y + 1;
@@ -285,7 +290,7 @@ public class GameScreenLevel2 implements Screen{
         for (Coin coin : coins) {
             if(coin.getX()-1.5f < ninja.getX() &&coin.getX()+1.5f > ninja.getX() &&coin.getY()-1.5f < ninja.getY() && coin.getY()+1.5f > ninja.getY()){
                 //dropSound.play();
-                score+=10;
+                score+=15;
                 coin.remove();
                 coin.setY(100);
             }
@@ -323,5 +328,48 @@ public class GameScreenLevel2 implements Screen{
             game.setScreen(new FinalScreen(game, this.score));
                       
         }                  
+    }
+     
+    private void loadMuniecoPeque(float startX, float startY) {
+        TiledMapTileLayer monedas = (TiledMapTileLayer) map.getLayers().get("munieco_peque");
+        
+        float endX = startX + monedas.getWidth();
+        float endY = startY + monedas.getHeight();
+
+        int x = (int) startX;
+        while (x < endX) {
+
+            int y = (int) startY;
+            while (y < endY) {
+                if (monedas.getCell(x, y) != null) {
+                    if (monedas.getProperties().get("visible", Boolean.class) == true) {
+                        monedas.setCell(x, y, null);
+                        this.spawMuniecoPeque(x,y);
+                    }
+                }
+                y = y + 1;
+            }
+            x = x + 1;
+        }
+    }
+     
+     public void spawMuniecoPeque (float x, float y){
+        Munieco_Mas_5 mun = new Munieco_Mas_5();
+        mun.setPosition(x, y);
+        stage.addActor(mun);
+        muniecos_peque.add(mun);
+    }
+     
+     public void overlapsMuniecoPeque(){
+        int i = 0;
+        for (Munieco_Mas_5 muni : muniecos_peque) {
+            if(muni.getX()-1.5f < ninja.getX() &&muni.getX()+1.5f > ninja.getX() &&muni.getY()-1.5f < ninja.getY() && muni.getY()+1.5f > ninja.getY()){
+                //dropSound.play();
+                score+=5;
+                muni.remove();
+                muni.setY(100);
+            }
+            i++;
+        }      
     }
 }

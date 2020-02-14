@@ -26,7 +26,7 @@ public class Munieco_Mas_60 extends Image{
     TiledMapTileLayer layer;
 
     final float GRAVITY = -2.5f;
-    final float MAX_VELOCITY = 3f;
+    final float MAX_VELOCITY = 5f;
     final float DAMPING = 0.87f;
 
     public Munieco_Mas_60() {        
@@ -43,38 +43,38 @@ public class Munieco_Mas_60 extends Image{
     public void movimiento_munieco2(float delta, float ninja_x) {
         time = time + delta;
 
-//            if(ninja_x>getX()){
-                this.xVelocity = MAX_VELOCITY;
-                this.isFacingRight = true;
-//            } else{
-//                xVelocity = -1 * MAX_VELOCITY;
-//                this.isFacingRight = false;
-//            }
+        if(ninja_x<getX()){
+            this.xVelocity = MAX_VELOCITY;
+            this.isFacingRight = true;
+        } else{
+            xVelocity = -1 * MAX_VELOCITY;
+            this.isFacingRight = false;
+        }
         
         yVelocity = yVelocity + GRAVITY;
 
         yVelocity = yVelocity + GRAVITY;
 
-//        float x = this.getX();
-//        float y = this.getY();
-//        float xChange = xVelocity * delta;
-//        float yChange = yVelocity * delta;
-//
-//        if (canMoveTo(x + xChange, y, false) == false) {
-//            xVelocity = xChange = 0;
-//        }
-//
-//        if (canMoveTo(x, y + yChange, yVelocity > 0) == false) {
-//            canJump = yVelocity < 0;
-//            yVelocity = yChange = 0;
-//        }
-//
-//        this.setPosition(x + xChange, y + yChange);
-//
-//        xVelocity = xVelocity * DAMPING;
-//        if (Math.abs(xVelocity) < 0.5f) {
-//            xVelocity = 0;
-//        }
+        float x = this.getX();
+        float y = this.getY();
+        float xChange = xVelocity * delta;
+        float yChange = yVelocity * delta;
+
+        if (canMoveTo(x + xChange, y, false) == false) {
+            xVelocity = xChange = 0;
+        }
+
+        if (canMoveTo(x, y + yChange, yVelocity > 0) == false) {
+            canJump = yVelocity < 0;
+            yVelocity = yChange = 0;
+        }
+
+        this.setPosition(x + xChange, y + yChange);
+
+        xVelocity = xVelocity * DAMPING;
+        if (Math.abs(xVelocity) < 0.5f) {
+            xVelocity = 0;
+        }
     }
     
     public void draw(Batch batch, float parentAlpha) {
@@ -89,26 +89,26 @@ public class Munieco_Mas_60 extends Image{
         }
     }
 
-//    private boolean canMoveTo(float startX, float startY, boolean shouldDestroy) {
-//        float endX = startX + this.getWidth();
-//        float endY = startY + this.getHeight();
-//
-//        int x = (int) startX;
-//        while (x < endX) {
-//
-//            int y = (int) startY;
-//            while (y < endY) {
-//                if (layer.getCell(x, y) != null) {
-//                    if (shouldDestroy) {
-//                        layer.setCell(x, y, null);
-//                    }
-//                    return false;
-//                }
-//                y = y + 1;
-//            }
-//            x = x + 1;
-//        }
-//
-//        return true;
-//    }
+    private boolean canMoveTo(float startX, float startY, boolean shouldDestroy) {
+        float endX = startX + this.getWidth();
+        float endY = startY + this.getHeight();
+
+        int x = (int) startX;
+        while (x < endX) {
+
+            int y = (int) startY;
+            while (y < endY) {
+                if (layer.getCell(x, y) != null) {
+                    if (shouldDestroy) {
+                        layer.setCell(x, y, null);
+                    }
+                    return false;
+                }
+                y = y + 1;
+            }
+            x = x + 1;
+        }
+
+        return true;
+    }
 }
