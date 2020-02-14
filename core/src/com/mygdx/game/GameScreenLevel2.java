@@ -39,10 +39,9 @@ public class GameScreenLevel2 implements Screen{
     Munieco_Mas_60 mun_sum;
     
     
-    
     GameScreenLevel2(MyGdxGame game, int score, Ninja ninja) {
         this.game = game;
-        this.score = score;
+        this.score += score;
         this.ninja = ninja;
     }
 
@@ -66,6 +65,7 @@ public class GameScreenLevel2 implements Screen{
         stage.addActor(zombie);
         
         this.mun_resta = new Munieco_Menos_60();
+        mun_resta.layer = (TiledMapTileLayer) map.getLayers().get("tierras");
         this.loadMunieco3(0, 0);
         
         this.mun_sum = new Munieco_Mas_60();
@@ -163,24 +163,26 @@ public class GameScreenLevel2 implements Screen{
             //dropSound.play();
             score-=25;
             if(zombie.getX()>ninja.getX()){
-                ninja.setX(ninja.getX()-5);
+                ninja.xVelocity -= 50;
             }else{
-                ninja.setX(ninja.getX()+5);
+                ninja.xVelocity += 50;
             }            
-        }      
+        }       
     }
     
     public void overlapsMuniecoResta(){
         if(this.mun_resta.getX()-1f < ninja.getX() &&mun_resta.getX()+1f > ninja.getX() &&mun_resta.getY()-1f < ninja.getY() && mun_resta.getY()+1f > ninja.getY()){
             //dropSound.play();
             score-=60;
+            
             if(mun_resta.getX()>ninja.getX()){
-                ninja.setX(ninja.getX()-10);
+                ninja.xVelocity -= 100;
             }else{
-                ninja.setX(ninja.getX()+10);
-            }     
-            mun_resta.remove();
-            mun_resta.setY(100);
+                ninja.xVelocity += 100;
+            }  
+            
+//            mun_resta.remove();
+//            mun_resta.setY(100);
         } 
     }
     
@@ -212,7 +214,7 @@ public class GameScreenLevel2 implements Screen{
                 if (monedas.getCell(x, y) != null) {
                     if (monedas.getProperties().get("vis", Boolean.class) == true) {
                         monedas.setCell(x, y, null);
-                        this.mun_resta = new Munieco_Menos_60();                        
+                        //this.mun_resta = new Munieco_Menos_60();                        
                         this.mun_resta.setPosition(x, y);
                         stage.addActor(mun_resta);                        
                     }

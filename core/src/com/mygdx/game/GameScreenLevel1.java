@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -88,7 +89,7 @@ public class GameScreenLevel1 implements Screen{
     }
 
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.5f, 0.5f, 1, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         camera.position.x = ninja.getX();
@@ -241,9 +242,9 @@ public class GameScreenLevel1 implements Screen{
             //dropSound.play();
             score-=25;
             if(zombie.getX()>ninja.getX()){
-                ninja.setX(ninja.getX()-5);
+                ninja.xVelocity -= 50;
             }else{
-                ninja.setX(ninja.getX()+5);
+                ninja.xVelocity += 50;
             }            
         }      
     }
