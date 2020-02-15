@@ -20,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public class ZombieMale extends Image{
     TextureRegion stand;
-    Animation walk, jump;
+    Animation walk;
 
     
     float time = 0;
@@ -39,8 +39,8 @@ public class ZombieMale extends Image{
         final float height = 40; //120
         this.setSize(1, height / width);
 
-        Texture ninjaTexture = new Texture("zombie.png");
-        TextureRegion[][] grid = TextureRegion.split(ninjaTexture, (int) width, (int) height);
+        Texture zombieTexture = new Texture("zombie.png");
+        TextureRegion[][] grid = TextureRegion.split(zombieTexture, (int) width, (int) height);
         
         stand = grid[0][0];
         walk = new Animation(0.15f, grid[0][1], grid[1][0], grid[1][1], grid[2][0],grid[2][1]);        
@@ -87,7 +87,6 @@ public class ZombieMale extends Image{
     public void movimiento_zombie2(float delta, float ninja_x) {
         time = time + delta;
 
-        
         if(ninja_x>getX()){
             this.xVelocity = MAX_VELOCITY;
             this.isFacingRight = true;
@@ -95,7 +94,6 @@ public class ZombieMale extends Image{
             xVelocity = -1 * MAX_VELOCITY;
             this.isFacingRight = false;
         }
-        
         
         yVelocity = yVelocity + GRAVITY;
 

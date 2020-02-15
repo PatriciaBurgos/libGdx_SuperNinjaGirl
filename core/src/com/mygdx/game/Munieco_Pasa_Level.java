@@ -39,8 +39,8 @@ public class Munieco_Pasa_Level extends Image {
         this.setY(20);
         this.setX(20);
 
-        Texture ninjaTexture = new Texture("munieco.png");
-        TextureRegion[][] grid = TextureRegion.split(ninjaTexture, (int) width, (int) height);
+        Texture munieco = new Texture("munieco.png");
+        TextureRegion[][] grid = TextureRegion.split(munieco, (int) width, (int) height);
 
         stand = grid[0][0];
     }
@@ -53,14 +53,9 @@ public class Munieco_Pasa_Level extends Image {
         
     }
 
-    
     public void draw(Batch batch, float parentAlpha) {
         TextureRegion frame;
-
-        frame = stand;
-        
-        batch.draw(frame, this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        
-    }
-    
+        frame = stand;        
+        batch.draw(frame, this.getX(), this.getY(), this.getWidth(), this.getHeight());        
+    }   
 }

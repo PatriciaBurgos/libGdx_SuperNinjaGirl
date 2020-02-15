@@ -35,8 +35,8 @@ public class Munieco_Menos_60 extends Image{
         final float height = 18; 
         this.setSize(1, height / width);
 
-        Texture ninjaTexture = new Texture("munieco3.png");
-        TextureRegion[][] grid = TextureRegion.split(ninjaTexture, (int) width, (int) height);
+        Texture munieco = new Texture("munieco3.png");
+        TextureRegion[][] grid = TextureRegion.split(munieco, (int) width, (int) height);
         
         stand = grid[0][0];
     }

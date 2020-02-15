@@ -18,9 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
  */
 public class ZombieFemale extends Image{
 TextureRegion stand;
-    Animation walk, jump;
+    Animation walk;
 
-    
     float time = 0;
     float xVelocity = 0;
     float yVelocity = 0;
@@ -39,8 +38,8 @@ TextureRegion stand;
         final float height = 30; //120
         this.setSize(1, height / width);
 
-        Texture ninjaTexture = new Texture("zombie_female.png");
-        TextureRegion[][] grid = TextureRegion.split(ninjaTexture, (int) width, (int) height);
+        Texture zombieTexture = new Texture("zombie_female.png");
+        TextureRegion[][] grid = TextureRegion.split(zombieTexture, (int) width, (int) height);
         
         stand = grid[0][0];
         walk = new Animation(0.15f, grid[0][1], grid[0][2], grid[1][0], grid[1][1],grid[1][2]);        

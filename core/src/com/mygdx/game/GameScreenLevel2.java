@@ -112,32 +112,18 @@ public class GameScreenLevel2 implements Screen{
         
         camera.update();
         
-        this.overlapsCoin();
-        this.overlapsMunieco();
-        this.overlapsZombieMale();
-        this.overlapsMuniecoResta();
-        this.overlapsMuniecoSuma();
-        this.overlapsMuniecoPeque();
-        
-        System.out.println("Ninja X = " + ninja.getX());
-//        System.out.println("Munieco_Pasa_Level x = "+ munieco.getX());
-        System.out.println("Ninja y = " + ninja.getY());
-//        System.out.println("Munieco_Pasa_Level y = "+ munieco.getY());
-        
+        this.overlaps();        
         
         renderer.setView(camera);
         renderer.render();
 
-        this.zombie.movimiento_zombie2(delta, ninja.getX());
-        this.mun_resta.movimiento_munieco3(delta, ninja.getX());
-        this.mun_sum.movimiento_munieco2(delta, ninja.getX());
+        this.movimientos(delta);
         
         stage.act(delta);
         stage.draw();
         
         game.batch.begin();
-        game.font.draw(game.batch, "Score: " + score, 100, 480);//SI NO FUNCIONA, PONER UN ATRIBUTO EN EL MAPA E IR LLAMANDOLO PARA SUMAR O RESTAR PUNTOS
-        //SI QUIRO MONEDAS ALEATORIAS AQUI (CREO)
+        game.font.draw(game.batch, "Score: " + score, 100, 480);
         game.batch.end();
     }
 
@@ -162,7 +148,6 @@ public class GameScreenLevel2 implements Screen{
     public void dispose() {
     }
 
-    
     public void overlapsZombieMale(){        
         if(zombie.getX()-1f < ninja.getX() &&zombie.getX()+1f > ninja.getX() &&zombie.getY()-1f < ninja.getY() && zombie.getY()+1f > ninja.getY()){
             //dropSound.play();
@@ -177,24 +162,19 @@ public class GameScreenLevel2 implements Screen{
     
     public void overlapsMuniecoResta(){
         if(this.mun_resta.getX()-1f < ninja.getX() &&mun_resta.getX()+1f > ninja.getX() &&mun_resta.getY()-1f < ninja.getY() && mun_resta.getY()+1f > ninja.getY()){
-            //dropSound.play();
             score-=60;
             
             if(mun_resta.getX()>ninja.getX()){
                 ninja.xVelocity -= 100;
             }else{
                 ninja.xVelocity += 100;
-            }  
-            
-//            mun_resta.remove();
-//            mun_resta.setY(100);
+            }              
         } 
     }
     
     public void overlapsMuniecoSuma(){
         if(this.mun_sum.getX()-1f < ninja.getX() &&mun_sum.getX()+1f > ninja.getX() &&mun_sum.getY()-1f < ninja.getY() && mun_sum.getY()+1f > ninja.getY()){
-            //dropSound.play();
-            score+=80;
+            score+=60;
             mun_sum.remove();     
             mun_sum.setY(100);
         } 
@@ -298,7 +278,7 @@ public class GameScreenLevel2 implements Screen{
         }      
     }
     
-     private void loadMunieco(float startX, float startY) {
+    private void loadMunieco(float startX, float startY) {
         TiledMapTileLayer monedas = (TiledMapTileLayer) map.getLayers().get("fin_juego");
         
         float endX = startX + monedas.getWidth();
@@ -325,8 +305,7 @@ public class GameScreenLevel2 implements Screen{
      
      public void overlapsMunieco(){
         if(munieco.getX()-1.5f < ninja.getX() &&munieco.getX()+1.5f > ninja.getX() &&munieco.getY()-1.5f < ninja.getY() && munieco.getY()+1.5f > ninja.getY()){
-            game.setScreen(new FinalScreen(game, this.score));
-                      
+            game.setScreen(new FinalScreen(game, this.score));                      
         }                  
     }
      
@@ -360,7 +339,7 @@ public class GameScreenLevel2 implements Screen{
         muniecos_peque.add(mun);
     }
      
-     public void overlapsMuniecoPeque(){
+    public void overlapsMuniecoPeque(){
         int i = 0;
         for (Munieco_Mas_5 muni : muniecos_peque) {
             if(muni.getX()-1.5f < ninja.getX() &&muni.getX()+1.5f > ninja.getX() &&muni.getY()-1.5f < ninja.getY() && muni.getY()+1.5f > ninja.getY()){
@@ -371,5 +350,20 @@ public class GameScreenLevel2 implements Screen{
             }
             i++;
         }      
+    }
+    
+    public void overlaps(){
+        this.overlapsCoin();
+        this.overlapsMunieco();
+        this.overlapsZombieMale();
+        this.overlapsMuniecoResta();
+        this.overlapsMuniecoSuma();
+        this.overlapsMuniecoPeque();
+    }
+    
+    public void movimientos(float delta){
+        this.zombie.movimiento_zombie2(delta, ninja.getX());
+        this.mun_resta.movimiento_munieco3(delta, ninja.getX());
+        this.mun_sum.movimiento_munieco2(delta, ninja.getX());
     }
 }

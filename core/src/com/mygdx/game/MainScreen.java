@@ -14,9 +14,7 @@ public class MainScreen implements Screen {
         
     private Texture texture,logo;
     private TextureRegion region;
-
     OrthographicCamera camera;
-
 
     public MainScreen(final MyGdxGame game) {
             this.game = game;
@@ -31,29 +29,27 @@ public class MainScreen implements Screen {
             logo = new Texture(Gdx.files.internal("super_logo.png"));
     }
 
-  
-
     @Override
     public void render(float delta) {
-            Gdx.gl.glClearColor(0, 0.1f, 0.3f, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0.1f, 0.3f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            game.batch.begin();
-            game.batch.draw(region,0,0);
-            game.batch.end();
+        game.batch.begin();
+        game.batch.draw(region,0,0);
+        game.batch.end();
 
-            camera.update();
-            game.batch.setProjectionMatrix(camera.combined);
+        camera.update();
+        game.batch.setProjectionMatrix(camera.combined);
 
-            game.batch.begin();
-            game.font.draw(game.batch, "PULSA LA PANTALLA PARA EMPEZAR", 100, 200);
-            game.batch.draw(logo, 100, 280);
-            game.batch.end();
+        game.batch.begin();
+        game.font.draw(game.batch, "PULSA LA PANTALLA PARA EMPEZAR", 100, 200);
+        game.batch.draw(logo, 100, 280);
+        game.batch.end();
 
-            if (Gdx.input.isTouched()) {
-                    game.setScreen(new GameScreenLevel1(game));
-                    dispose();
-            }
+        if (Gdx.input.isTouched()) {
+            game.setScreen(new GameScreenLevel1(game));
+            dispose();
+        }
     }
 
     @Override

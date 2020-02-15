@@ -46,8 +46,7 @@ public class GameScreenLevel1 implements Screen{
     Munieco_Pasa_Level munieco;
     public List<Munieco_Mas_5> muniecos_peque;
     
-    int score;
-    
+    int score;    
 
     GameScreenLevel1(MyGdxGame game) {
         this.game=game;
@@ -87,8 +86,6 @@ public class GameScreenLevel1 implements Screen{
         this.loadMuniecoPeque(0,0);
         
         score = 100;
-        
-        
     }
 
     public void render(float delta) {
@@ -120,31 +117,18 @@ public class GameScreenLevel1 implements Screen{
         
         camera.update();
         
-        this.overlapsCoin();
-        this.overlapsMunieco();
-        this.overlapsZombieMale();
-        this.overlapsZombieFemale();
-        this.overlapsMuniecoPeque();
-        
-        
-        System.out.println("Ninja X = " + ninja.getX());
-//        System.out.println("Munieco_Pasa_Level x = "+ munieco.getX());
-        System.out.println("Ninja y = " + ninja.getY());
-//        System.out.println("Munieco_Pasa_Level y = "+ munieco.getY());
-        
+        this.overlaps();
         
         renderer.setView(camera);
         renderer.render();
-
-        this.zombie.movimiento_zombie(delta, ninja.getX());
-        this.zombie_fem.movimiento_zombie(delta, ninja.getX());
         
+        this.movimientos(delta);
+
         stage.act(delta);
         stage.draw();
         
         game.batch.begin();
-        game.font.draw(game.batch, "Score: " + score, 100, 480);//SI NO FUNCIONA, PONER UN ATRIBUTO EN EL MAPA E IR LLAMANDOLO PARA SUMAR O RESTAR PUNTOS
-        //SI QUIRO MONEDAS ALEATORIAS AQUI (CREO)
+        game.font.draw(game.batch, "Score: " + score, 100, 480);
         game.batch.end();
     }
 
@@ -188,19 +172,19 @@ public class GameScreenLevel1 implements Screen{
     }
     
     private void loadMuniecoPeque(float startX, float startY) {
-        TiledMapTileLayer monedas = (TiledMapTileLayer) map.getLayers().get("munieco_peque");
+        TiledMapTileLayer munieco_peque = (TiledMapTileLayer) map.getLayers().get("munieco_peque");
         
-        float endX = startX + monedas.getWidth();
-        float endY = startY + monedas.getHeight();
+        float endX = startX + munieco_peque.getWidth();
+        float endY = startY + munieco_peque.getHeight();
 
         int x = (int) startX;
         while (x < endX) {
 
             int y = (int) startY;
             while (y < endY) {
-                if (monedas.getCell(x, y) != null) {
-                    if (monedas.getProperties().get("visible", Boolean.class) == true) {
-                        monedas.setCell(x, y, null);
+                if (munieco_peque.getCell(x, y) != null) {
+                    if (munieco_peque.getProperties().get("visible", Boolean.class) == true) {
+                        munieco_peque.setCell(x, y, null);
                         this.spawMuniecoPeque(x,y);
                     }
                 }
@@ -211,19 +195,19 @@ public class GameScreenLevel1 implements Screen{
     }
     
     private void loadMunieco(float startX, float startY) {
-        TiledMapTileLayer monedas = (TiledMapTileLayer) map.getLayers().get("estrella1");
+        TiledMapTileLayer munieco_pasa_level = (TiledMapTileLayer) map.getLayers().get("estrella1");
         
-        float endX = startX + monedas.getWidth();
-        float endY = startY + monedas.getHeight();
+        float endX = startX + munieco_pasa_level.getWidth();
+        float endY = startY + munieco_pasa_level.getHeight();
 
         int x = (int) startX;
         while (x < endX) {
 
             int y = (int) startY;
             while (y < endY) {
-                if (monedas.getCell(x, y) != null) {
-                    if (monedas.getProperties().get("visible", Boolean.class) == true) {
-                        monedas.setCell(x, y, null);
+                if (munieco_pasa_level.getCell(x, y) != null) {
+                    if (munieco_pasa_level.getProperties().get("visible", Boolean.class) == true) {
+                        munieco_pasa_level.setCell(x, y, null);
                         munieco = new Munieco_Pasa_Level();                        
                         munieco.setPosition(x, y);
                         stage.addActor(munieco);                        
@@ -234,7 +218,6 @@ public class GameScreenLevel1 implements Screen{
             x = x + 1;
         }
     }
-    
     
     public void spawMoneda (float x, float y){
         Coin coin2 = new Coin();
@@ -254,7 +237,6 @@ public class GameScreenLevel1 implements Screen{
         int i = 0;
         for (Coin coin : coins) {
             if(coin.getX()-1.5f < ninja.getX() &&coin.getX()+1.5f > ninja.getX() &&coin.getY()-1.5f < ninja.getY() && coin.getY()+1.5f > ninja.getY()){
-                //dropSound.play();
                 score+=15;
                 coin.remove();
                 coin.setY(100);
@@ -278,15 +260,12 @@ public class GameScreenLevel1 implements Screen{
     
     public void overlapsMunieco(){
         if(munieco.getX()-1.5f < ninja.getX() &&munieco.getX()+1.5f > ninja.getX() &&munieco.getY()-1.5f < ninja.getY() && munieco.getY()+1.5f > ninja.getY()){
-            game.setScreen(new GameScreenLevel2(game, this.score, this.ninja));
-                      
+            game.setScreen(new GameScreenLevel2(game, this.score, this.ninja));                      
         }                  
     }
     
-    public void overlapsZombieMale(){
-        
+    public void overlapsZombieMale(){        
         if(zombie.getX()-1f < ninja.getX() &&zombie.getX()+1f > ninja.getX() &&zombie.getY()-1f < ninja.getY() && zombie.getY()+1f > ninja.getY()){
-            //dropSound.play();
             score-=25;
             if(zombie.getX()>ninja.getX()){
                 ninja.xVelocity -= 50;
@@ -296,13 +275,10 @@ public class GameScreenLevel1 implements Screen{
         }      
     }
     
-    public void overlapsZombieFemale(){
-        
+    public void overlapsZombieFemale(){        
         if(zombie_fem.getX()-1f < ninja.getX() &&zombie_fem.getX()+1f > ninja.getX() &&zombie_fem.getY()-1f < ninja.getY() && zombie_fem.getY()+1f > ninja.getY()){
-            //dropSound.play();
             score-=40;
-            ninja.setX(50);
-                       
+            ninja.setX(50);                       
         }      
     }
     
@@ -311,6 +287,16 @@ public class GameScreenLevel1 implements Screen{
         dispose();
     }
     
+    public void overlaps(){
+        this.overlapsCoin();
+        this.overlapsMunieco();
+        this.overlapsZombieMale();
+        this.overlapsZombieFemale();
+        this.overlapsMuniecoPeque();
+    }
     
-    //HACER COLISISONES CON EL ZOMBIE Y EL NINJA CON UN SCORE
+    public void movimientos(float delta){
+        this.zombie.movimiento_zombie(delta, ninja.getX());
+        this.zombie_fem.movimiento_zombie(delta, ninja.getX());
+    }
 }

@@ -21,7 +21,7 @@ public class FinalScreen implements Screen{
     final MyGdxGame game;
         
     private SpriteBatch batch;
-    private Texture texture,logo;
+    private Texture texture;
     private TextureRegion region;
 
     OrthographicCamera camera;
@@ -29,40 +29,38 @@ public class FinalScreen implements Screen{
     int score;
 
     public FinalScreen(final MyGdxGame game, int score) {
-            this.game = game;
-            this.score = score;
+        this.game = game;
+        this.score = score;
 
-            camera = new OrthographicCamera();
-            camera.setToOrtho(false, 800, 480);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 480);
 
-            batch = new SpriteBatch();   
-            texture = new Texture(Gdx.files.internal("BG.png"));
-            region = new TextureRegion(texture,0,0,800,480);
+        batch = new SpriteBatch();   
+        texture = new Texture(Gdx.files.internal("BG.png"));
+        region = new TextureRegion(texture,0,0,800,480);
     }
-
-  
 
     @Override
     public void render(float delta) {
-            Gdx.gl.glClearColor(0, 0.1f, 0.3f, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0, 0.1f, 0.3f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            batch.begin();
-            batch.draw(region,0,0);
-            batch.end();
+        batch.begin();
+        batch.draw(region,0,0);
+        batch.end();
 
-            camera.update();
-            batch.setProjectionMatrix(camera.combined);
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
 
-            game.batch.begin();
-            game.font.draw(game.batch, "PULSA LA PANTALLA PARA VOLVER A EMPEZAR", 100, 200);
-            game.font.draw(game.batch, "SCORE: " + score, 100, 180);
-            game.batch.end();
+        game.batch.begin();
+        game.font.draw(game.batch, "PULSA LA PANTALLA PARA VOLVER A EMPEZAR", 100, 200);
+        game.font.draw(game.batch, "SCORE: " + score, 100, 180);
+        game.batch.end();
 
-            if (Gdx.input.isTouched()) {
-                    game.setScreen(new GameScreenLevel1(game));
-                    dispose();
-            }
+        if (Gdx.input.isTouched()) {
+            game.setScreen(new GameScreenLevel1(game));
+            dispose();
+        }
     }
 
     @Override
